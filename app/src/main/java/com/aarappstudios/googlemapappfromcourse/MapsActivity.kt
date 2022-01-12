@@ -2,6 +2,8 @@ package com.aarappstudios.googlemapappfromcourse
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,6 +17,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.map_type_menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId)
+        {
+            R.id.menu_normal->{
+                mMap.mapType=GoogleMap.MAP_TYPE_NORMAL
+            }
+            R.id.menu_hybrid->{
+                mMap.mapType=GoogleMap.MAP_TYPE_HYBRID
+            }
+            R.id.menu_satellite->{
+                mMap.mapType=GoogleMap.MAP_TYPE_SATELLITE
+            }
+            R.id.menu_terrain->{
+                mMap.mapType=GoogleMap.MAP_TYPE_TERRAIN
+            }
+            R.id.menu_none->{
+                mMap.mapType=GoogleMap.MAP_TYPE_NONE
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

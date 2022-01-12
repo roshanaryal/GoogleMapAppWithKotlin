@@ -1,5 +1,6 @@
 package com.aarappstudios.googlemapappfromcourse
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.aarappstudios.googlemapappfromcourse.databinding.ActivityMapsBinding
+import com.aarappstudios.googlemapappfromcourse.misc.CameraAndViewport
+import com.aarappstudios.googlemapappfromcourse.misc.TypeAndStyle
 import com.google.android.gms.maps.model.MapStyleOptions
 import java.lang.Exception
 
@@ -21,30 +24,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
 
+    private val typeAndStyle by lazy { TypeAndStyle() }
+    private val cameraAndViewport by lazy { CameraAndViewport() }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.map_type_menu,menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId)
-        {
-            R.id.menu_normal->{
-                mMap.mapType=GoogleMap.MAP_TYPE_NORMAL
-            }
-            R.id.menu_hybrid->{
-                mMap.mapType=GoogleMap.MAP_TYPE_HYBRID
-            }
-            R.id.menu_satellite->{
-                mMap.mapType=GoogleMap.MAP_TYPE_SATELLITE
-            }
-            R.id.menu_terrain->{
-                mMap.mapType=GoogleMap.MAP_TYPE_TERRAIN
-            }
-            R.id.menu_none->{
-                mMap.mapType=GoogleMap.MAP_TYPE_NONE
-            }
-        }
+
+        typeAndStyle.setMapType(item,mMap)
         return super.onOptionsItemSelected(item)
     }
 
@@ -76,11 +66,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
         val kathmandu=LatLng(27.7172,85.3240)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
         mMap.addMarker(MarkerOptions().position(kathmandu).title("Marker in ktm"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kathmandu,15f))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kathmandu,15f))
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraAndViewport.kathmandu))
 
         mMap.uiSettings.apply {
             isZoomControlsEnabled=true
@@ -94,23 +85,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 //        mMap.setPadding(100,0,100,0)
 
         //style
-        setMapStyle(mMap)
+        typeAndStyle.setMapStyle(mMap,this)
     }
 
-    fun setMapStyle(map:GoogleMap)
-    {
-        try {
-            val success=map.setMapStyle(MapStyleOptions.loadRawResourceStyle(
-                this,
-                R.raw.style
-            ))
-            if (!success)
-                Log.d(Companion.TAG, "setMapStyle: failed")
-        }catch (e:Exception)
-        {
-            Log.d(TAG, "setMapStyle: ${e.localizedMessage}")
-        }
-    }
 
     companion object {
         const val TAG="TAG"

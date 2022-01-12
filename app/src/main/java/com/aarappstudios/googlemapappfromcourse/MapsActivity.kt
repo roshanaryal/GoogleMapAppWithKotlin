@@ -56,5 +56,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             isMyLocationButtonEnabled=true
         }
+
+        //pading
+//        mMap.setPadding(100,0,100,0)
     }
 }

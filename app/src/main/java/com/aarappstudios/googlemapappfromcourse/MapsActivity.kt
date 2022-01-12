@@ -42,7 +42,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
+        val kathmandu=LatLng(27.7172,85.3240)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        mMap.addMarker(MarkerOptions().position(kathmandu).title("Marker in ktm"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kathmandu,15f))
+
+        mMap.uiSettings.apply {
+            isZoomControlsEnabled=true
+//            isZoomGesturesEnabled=false
+//            isScrollGesturesEnabled=false
+
+            isMyLocationButtonEnabled=true
+        }
     }
 }
